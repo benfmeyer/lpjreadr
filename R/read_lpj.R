@@ -7,7 +7,7 @@
 #' @return returns a nested tibble grouped by pfts or pfts and vars for one or more
 #'     var inputs, respectively
 #'
-#'
+#' @export
 #' @examples
 #' \dontrun{
 #' path <- "path/to/lpj/nc/file.nc"
