@@ -1,0 +1,22 @@
+Package: lpjreadr
+Type: Package
+Title: lpjreadr provides a quick and easy way to extract data from LPJ-GUESS smartoutput files
+Version: 0.0.0.9000
+Authors@R: person("Ben", "Meyer", email = "meyer.ben93@gmail.com",
+  role = c("aut", "cre"))
+Description: lpjreadr provides functions which make it easier to deal with output data from the
+    smartouput module of LPJ-GUESS which is stored in netcdf format. lpjreadr handles the extraction
+    of multiple variables at once and outputs them in tidy, nested tibbles.
+License: AGPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Imports:
+    abind,
+    dplyr,
+    magrittr,
+    ncdf4,
+    purrr,
+    rlang,
+    tibble,
+    tidyr
+RoxygenNote: 7.1.1
