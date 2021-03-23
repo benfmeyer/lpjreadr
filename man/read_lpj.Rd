@@ -25,4 +25,5 @@ read_lpj
 path <- "path/to/lpj/nc/file.nc"
 tidy_output <- read_lpj(path, c("Pft-Out/npp", "Pft-Out/gpp"), "year")
 }
+
 }

@@ -13,9 +13,10 @@
 #' path <- "path/to/lpj/nc/file.nc"
 #' tidy_output <- read_lpj(path, c("Pft-Out/npp", "Pft-Out/gpp"), "year")
 #' }
-#' @importFrom rlang .data
+#'
 read_lpj <- function(nc_path, var_name, res) {
   Date <- Lat <- Lon <- Pft <- Var <- NULL
+  . <- "I'm a tree, leave me alone"
 
   nc <- ncdf4::nc_open(nc_path)
 
@@ -35,8 +36,8 @@ read_lpj <- function(nc_path, var_name, res) {
         tibble::as_tibble(.name_repair = "minimal") %>%
         purrr::set_names(pfts) %>%
         dplyr::mutate(
-          Lat = rep(lat[[i]], nrow(.data)),
-          Lon = rep(lon[[i]], nrow(.data)),
+          Lat = rep(lat[[i]], nrow(.)),
+          Lon = rep(lon[[i]], nrow(.)),
           Date = dates
         )
 
@@ -72,10 +73,10 @@ read_lpj <- function(nc_path, var_name, res) {
           tibble::as_tibble(.name_repair = "minimal") %>%
           purrr::set_names(pfts) %>%
           dplyr::mutate(
-            Lat = rep(lat[[i]], nrow(.data)),
-            Lon = rep(lon[[i]], nrow(.data)),
+            Lat = rep(lat[[i]], nrow(.)),
+            Lon = rep(lon[[i]], nrow(.)),
             Date = dates,
-            Var = rep(var_name[[h]], nrow(.data))
+            Var = rep(var_name[[h]], nrow(.))
           )
       }
       outer_list[[h]] <- inner_list
