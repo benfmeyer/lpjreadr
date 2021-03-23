@@ -65,7 +65,7 @@ read_lpj <- function(nc_path, var_name, res) {
 
     inner_list <- outer_list <- vector("list")
     for (j in seq_along(joined_arrays[1, 1, 1, ])) {
-      outer_list[[j]] <- joined_arrays[, , , 1]
+      outer_list[[j]] <- joined_arrays[, , , j]
     }
     for (h in seq_along(outer_list)) {
       for (i in seq_along(t(outer_list[[h]][1, 1, ]))) {
