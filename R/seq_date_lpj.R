@@ -7,8 +7,8 @@
 #' @export
 
 
-seq_date_lpj <- function(time, res) {
-  date_vec <- seq.Date(from = as.Date("1901-01-01"),
+seq_date_lpj <- function(time, res, start = "1901-01-01") {
+  date_vec <- seq.Date(from = as.Date(start),
                        length.out = length(time), by = res)
   if (res == "year") {
     date_vec <- format.Date(date_vec, "%Y")
