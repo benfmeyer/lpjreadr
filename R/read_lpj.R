@@ -3,6 +3,7 @@
 #' @param nc_path  path to netcdf file containing lpj output
 #' @param var_name variable(s) to extract from nc file ("var1" or c("var1", "var2", ...))
 #' @param res      temporal resolution of nc file ("year", "month", or "day")
+#' @param start    gets passed to seq_date_lpj to determine beginning of time series
 #'
 #' @return returns a nested tibble grouped by pfts or pfts and vars for one or more
 #'     var inputs, respectively
@@ -14,8 +15,8 @@
 #' tidy_output <- read_lpj(path, c("Pft-Out/npp", "Pft-Out/gpp"), "year")
 #' }
 #'
-read_lpj <- function(nc_path, var_name, res) {
-  Date <- Lat <- Lon <- Pft <- Var <- NULL
+read_lpj <- function(nc_path, var_name, res, start = "1901-01-01") {
+  date <- lat <- lon <- pft <- var <- NULL
   . <- "I'm a tree, leave me alone"
 
   nc <- ncdf4::nc_open(nc_path)
@@ -25,7 +26,7 @@ read_lpj <- function(nc_path, var_name, res) {
   pfts <- ncdf4::ncvar_get(nc, "Base/Pfts")
 
   time <- nc$dim$Time$vals
-  dates <- seq_date_lpj(time, res)
+  dates <- seq_date_lpj(time, res, start)
 
   if (length(var_name) == 1) {
     var1 <- ncdf4::ncvar_get(nc, var_name)
@@ -42,11 +43,11 @@ read_lpj <- function(nc_path, var_name, res) {
         )
 
       out_tibble <- dplyr::bind_rows(out_list) %>%
-        tidyr::pivot_longer(-c(Date, Lat, Lon),
-          names_to = "Pft",
-          values_to = "Value"
+        tidyr::pivot_longer(-c(date, lat, lon),
+          names_to = "pft",
+          values_to = "value"
         ) %>%
-        dplyr::group_nest(Pft)
+        dplyr::group_nest(pft)
     }
   }
 
@@ -73,20 +74,20 @@ read_lpj <- function(nc_path, var_name, res) {
           tibble::as_tibble(.name_repair = "minimal") %>%
           purrr::set_names(pfts) %>%
           dplyr::mutate(
-            Lat = rep(lat[[i]], nrow(.)),
-            Lon = rep(lon[[i]], nrow(.)),
-            Date = dates,
-            Var = rep(var_name[[h]], nrow(.))
+            lat = rep(lat[[i]], nrow(.)),
+            lon = rep(lon[[i]], nrow(.)),
+            date = dates,
+            var = rep(var_name[[h]], nrow(.))
           )
       }
       outer_list[[h]] <- inner_list
     }
 
     out_tibble <- dplyr::bind_rows(outer_list) %>%
-      tidyr::pivot_longer(-c(Date, Lat, Lon, Var),
-                   names_to = "Pft",
-                   values_to = "Value") %>%
-      dplyr::group_nest(Pft, Var)
+      tidyr::pivot_longer(-c(date, lat, lon, var),
+                   names_to = "pft",
+                   values_to = "value") %>%
+      dplyr::group_nest(pft, var)
   }
   ncdf4::nc_close(nc)
   return(out_tibble)

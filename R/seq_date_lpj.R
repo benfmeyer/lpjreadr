@@ -2,6 +2,7 @@
 #' primarily for internal use in read_lpj but can also be used on its own
 #' @param time time variable from lpj output file
 #' @param res  temporal resolution of lpj output file
+#' @param start when to start date vector
 #'
 #' @return returns a date vector without leap years
 #' @export
