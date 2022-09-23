@@ -25,7 +25,7 @@ read_lpj <- function(nc_path, var_name, res, start = "1901-01-01") {
   lon <- ncdf4::ncvar_get(nc, "Base/Longitude")
   pfts <- ncdf4::ncvar_get(nc, "Base/Pfts")
 
-  time <- nc$dim$Time$vals
+  time <- nc$dim$time$vals
   dates <- seq_date_lpj(time, res, start)
 
   if (length(var_name) == 1) {
@@ -37,9 +37,9 @@ read_lpj <- function(nc_path, var_name, res, start = "1901-01-01") {
         tibble::as_tibble(.name_repair = "minimal") %>%
         purrr::set_names(pfts) %>%
         dplyr::mutate(
-          Lat = rep(lat[[i]], nrow(.)),
-          Lon = rep(lon[[i]], nrow(.)),
-          Date = dates
+          lat = rep(lat[[i]], nrow(.)),
+          lon = rep(lon[[i]], nrow(.)),
+          date = dates
         )
 
       out_tibble <- dplyr::bind_rows(out_list) %>%

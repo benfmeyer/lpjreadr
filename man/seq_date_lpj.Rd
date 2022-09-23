@@ -5,12 +5,14 @@
 \title{seq_date_lpj
 primarily for internal use in read_lpj but can also be used on its own}
 \usage{
-seq_date_lpj(time, res)
+seq_date_lpj(time, res, start = "1901-01-01")
 }
 \arguments{
 \item{time}{time variable from lpj output file}
 
 \item{res}{temporal resolution of lpj output file}
+
+\item{start}{when to start date vector}
 }
 \value{
 returns a date vector without leap years

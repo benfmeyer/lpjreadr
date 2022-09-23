@@ -4,7 +4,7 @@
 \alias{read_lpj}
 \title{read_lpj}
 \usage{
-read_lpj(nc_path, var_name, res)
+read_lpj(nc_path, var_name, res, start = "1901-01-01")
 }
 \arguments{
 \item{nc_path}{path to netcdf file containing lpj output}
@@ -12,6 +12,8 @@ read_lpj(nc_path, var_name, res)
 \item{var_name}{variable(s) to extract from nc file ("var1" or c("var1", "var2", ...))}
 
 \item{res}{temporal resolution of nc file ("year", "month", or "day")}
+
+\item{start}{gets passed to seq_date_lpj to determine beginning of time series}
 }
 \value{
 returns a nested tibble grouped by pfts or pfts and vars for one or more
