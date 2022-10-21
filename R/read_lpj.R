@@ -14,7 +14,7 @@
 #'
 
 
-read_lpj2 <- function(nc_path, var_name) {
+read_lpj <- function(nc_path, var_name) {
 
   .add_attributes <- function(x, var_name, pfts, lat, lon, dates) {
     x |>
