@@ -1,4 +1,4 @@
-#' read_lpj
+#' read_lpj_pft
 #'
 #' @param nc_path  path to netcdf file containing lpj output
 #' @param var_name variable(s) to extract from nc file ("var1" or c("var1", "var2", ...))
@@ -9,12 +9,12 @@
 #' @examples
 #' \dontrun{
 #' path <- "path/to/lpj/nc/file.nc"
-#' tidy_output <- read_lpj(path, c("Pft-Out/npp", "Pft-Out/gpp"))
+#' tidy_output <- read_lpj_pft(path, c("Pft-Out/npp", "Pft-Out/gpp"))
 #' }
 #'
 
 
-read_lpj <- function(nc_path, var_name) {
+read_lpj_pft <- function(nc_path, var_name) {
 
   .add_attributes <- function(x, var_name, pfts, lat, lon, dates) {
     x |>
