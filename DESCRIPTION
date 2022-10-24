@@ -17,5 +17,7 @@ Imports:
     ncdf4,
     purrr,
     tibble,
-    utils
+    utils,
+    matrixStats,
+    vctrs
 RoxygenNote: 7.2.1
