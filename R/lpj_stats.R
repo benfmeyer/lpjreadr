@@ -55,17 +55,22 @@ lpj_stats <- function(nc_path, lvl = "both") {
                     var = var)
 
     if (lvl == "both")
+
+
       return(stt)
 
     if (lvl == "gridcell") {
       stt <- stt |>
         dplyr::mutate(lon = rep(lon, 4),
                       lat = rep(lat, 4))
+
+
       return(stt)
     }
 
     stt <- stt |>
       dplyr::mutate(date = rep(dates, 4))
+
 
     return(stt)
   }
@@ -111,5 +116,6 @@ lpj_stats <- function(nc_path, lvl = "both") {
     dplyr::bind_rows() |>
     dplyr::rename(val = `...1`)
 
+  ncdf4::nc_close(nc)
   return(list(pft_vv, patch_vv))
 }
