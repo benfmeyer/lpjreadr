@@ -16,6 +16,8 @@
 
 read_lpj_patch <- function(nc_path, var_name) {
 
+  var_name_internal <- paste0("Patch-Out/",var_name)
+
   .add_attributes <- function(x, var_name, lat, lon, dates) {
     x |>
       tibble::as_tibble(.name_repair = "minimal") |>
@@ -49,7 +51,7 @@ read_lpj_patch <- function(nc_path, var_name) {
   if (length(lat) != 1) {
     if (length(var_name) != 1) {
 
-      out_tibble <- lapply(var_name, ncdf4::ncvar_get, nc = nc) |>
+      out_tibble <- lapply(var_name_internal, ncdf4::ncvar_get, nc = nc) |>
         lapply(as.data.frame) |>
         lapply(utils::stack) |>
         purrr::map2(var_name, .add_attributes, lat, lon, dates) |>
@@ -72,7 +74,7 @@ read_lpj_patch <- function(nc_path, var_name) {
 
   if (length(var_name) != 1) {
 
-    out_tibble <- lapply(var_name, ncdf4::ncvar_get, nc = nc) |>
+    out_tibble <- lapply(var_name_internal, ncdf4::ncvar_get, nc = nc) |>
       purrr::map2(var_name, .add_attributes, lat, lon, dates) |>
       dplyr::bind_rows()
 
