@@ -62,7 +62,7 @@ read_lpj_patch <- function(nc_path, var_name) {
       return(out_tibble)
     }
 
-    out_tibble <- ncdf4::ncvar_get(nc, var_name) |>
+    out_tibble <- ncdf4::ncvar_get(nc, var_name_internal) |>
       as.data.frame() |>
       utils::stack() |>
       .add_attributes(var_name, lat, lon, dates) |>
@@ -83,7 +83,7 @@ read_lpj_patch <- function(nc_path, var_name) {
   }
 
 
-  out_tibble <- ncdf4::ncvar_get(nc, var_name) |>
+  out_tibble <- ncdf4::ncvar_get(nc, var_name_internal) |>
     .add_attributes(var_name, lat, lon, dates)
 
   ncdf4::nc_close(nc)
