@@ -21,6 +21,7 @@ read_lpj_patch <- function(nc_path, var_name) {
   .add_attributes <- function(x, var_name, lat, lon, dates) {
     x |>
       tibble::as_tibble(.name_repair = "minimal") |>
+      dplyr::rename(value = 1) |>
       dplyr::mutate(date = rep(dates, length(lat)), lat = rep(lat, each = length(dates)),
                     lon = rep(lon, each = length(dates)), var = var_name)
   }
