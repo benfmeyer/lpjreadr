@@ -21,6 +21,7 @@ read_lpj_meta <- function(nc_path){
   lpj_meta <- dplyr::bind_cols(var_names, var_size) |>
     dplyr::rename("dimensions" = "value")
 
+  ncdf4::nc_close(nc)
   return(lpj_meta)
 
 }
