@@ -18,18 +18,25 @@ read_lpj_patch <- function(nc_path, var_name) {
 
   var_name_internal <- paste0("Patch-Out/",var_name)
 
-  .add_attributes <- function(x, var_name, lat, lon, dates) {
+  .add_attributes <- function(x, var_name, lat, lon, station_name, dates) {
     x |>
       tibble::as_tibble(.name_repair = "minimal") |>
       dplyr::rename(value = 1) |>
       dplyr::mutate(date = rep(dates, length(lat)), lat = rep(lat, each = length(dates)),
-                    lon = rep(lon, each = length(dates)), var = var_name)
+                    lon = rep(lon, each = length(dates)),
+                    site_id = rep(station_name, each = length(dates)), var = var_name)
   }
 
   nc   <- ncdf4::nc_open(nc_path)
   lat  <- ncdf4::ncvar_get(nc, "Base/Latitude")
   lon  <- ncdf4::ncvar_get(nc, "Base/Longitude")
   pfts <- ncdf4::ncvar_get(nc, "Base/Pfts")
+
+  if(!is.null(nc$var$`Base/StationName`)) {
+    station_name <- ncdf4::ncvar_get(nc, "Base/StationName")
+  } else {
+    station_name <- rep(NA, length(lat))
+  }
 
   start <- stringr::str_extract(nc$var$`Base/Time`$units, "\\d{2}-\\d{2}-\\d{4}") |>
     strsplit("-") |>
@@ -55,7 +62,7 @@ read_lpj_patch <- function(nc_path, var_name) {
       out_tibble <- lapply(var_name_internal, ncdf4::ncvar_get, nc = nc) |>
         lapply(as.data.frame) |>
         lapply(utils::stack) |>
-        purrr::map2(var_name, .add_attributes, lat, lon, dates) |>
+        purrr::map2(var_name, .add_attributes, lat, lon, station_name, dates) |>
         dplyr::bind_rows() |>
         dplyr::select(-"ind")
 
@@ -66,7 +73,7 @@ read_lpj_patch <- function(nc_path, var_name) {
     out_tibble <- ncdf4::ncvar_get(nc, var_name_internal) |>
       as.data.frame() |>
       utils::stack() |>
-      .add_attributes(var_name, lat, lon, dates) |>
+      .add_attributes(var_name, lat, lon, station_name, dates) |>
       dplyr::select(-"ind")
 
     ncdf4::nc_close(nc)
@@ -76,7 +83,7 @@ read_lpj_patch <- function(nc_path, var_name) {
   if (length(var_name) != 1) {
 
     out_tibble <- lapply(var_name_internal, ncdf4::ncvar_get, nc = nc) |>
-      purrr::map2(var_name, .add_attributes, lat, lon, dates) |>
+      purrr::map2(var_name, .add_attributes, lat, lon, station_name, dates) |>
       dplyr::bind_rows()
 
     ncdf4::nc_close(nc)
@@ -85,7 +92,7 @@ read_lpj_patch <- function(nc_path, var_name) {
 
 
   out_tibble <- ncdf4::ncvar_get(nc, var_name_internal) |>
-    .add_attributes(var_name, lat, lon, dates)
+    .add_attributes(var_name, lat, lon, station_name, dates)
 
   ncdf4::nc_close(nc)
   return(out_tibble)
